@@ -1,0 +1,8 @@
+[window]
+padding = { x = 15, y = 15}
+
+[font]
+normal = { family = "JetBrainsMonoNL Nerd Font", style = "regular" }
+bold = { family = "JetBrainsMonoNL Nerd Font", style = "bold" }
+
+size = 12
