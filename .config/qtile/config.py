@@ -125,7 +125,7 @@ layouts = [
     layout.Columns(
         border_focus_stack=["#d75f5f", "#8f3d3d"], 
         border_width=3,
-        margin=15
+        margin=5
     ),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
@@ -148,8 +148,15 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
+#CONFIG VARS
+window_gaps = 10;
+bar_gaps = 0;
+
 screens = [
     Screen(
+        bottom=bar.Gap(window_gaps),
+        left=bar.Gap(window_gaps),
+        right=bar.Gap(window_gaps),
         top=bar.Bar(
             [
                 widget.CurrentLayout(),
@@ -173,6 +180,8 @@ screens = [
                 widget.QuickExit(),
             ],
             24,
+            border_width=0,
+            margin = [bar_gaps, bar_gaps, window_gaps, bar_gaps],
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
         ),
