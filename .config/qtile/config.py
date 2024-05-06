@@ -24,87 +24,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from libqtile import bar, layout, qtile, widget
-from libqtile.config import Key, Match, Screen
-from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
-
 from groups import groups
 from keys import keys
 from mouse import mouse
 
-#CONFIG VARS
-bar_margin_gaps = 0
-window_external_margin_gaps = 10
-window_internal_margin_gaps = 5
+from layouts import layouts
+from screens import screens
 
-
-layouts = [
-    layout.Columns(
-        border_focus_stack=["#d75f5f", "#8f3d3d"], 
-        border_width=3,
-        margin = window_internal_margin_gaps
-    ),
-    layout.Max(),
-    # Try more layouts by unleashing below layouts.
-    # layout.Stack(num_stacks=2),
-    # layout.Bsp(),
-    # layout.Matrix(),
-    # layout.MonadTall(),
-    # layout.MonadWide(),
-    # layout.RatioTile(),
-    # layout.Tile(),
-    # layout.TreeTab(),
-    # layout.VerticalTile(),
-    # layout.Zoomy(),
-]
-
-widget_defaults = dict(
-    font="sans",
-    fontsize=12,
-    padding=3,
-)
-extension_defaults = widget_defaults.copy()
-
-screens = [
-    Screen(
-        bottom=bar.Gap(window_external_margin_gaps),
-        left=bar.Gap(window_external_margin_gaps),
-        right=bar.Gap(window_external_margin_gaps),
-        top=bar.Bar(
-            [
-                widget.CurrentLayout(),
-                widget.GroupBox(
-                    highlight_method='line'
-                ),
-                widget.Prompt(),
-                widget.WindowName(),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.TextBox("default config", name="default"),
-                widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
-                # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
-                # widget.StatusNotifier(),
-                widget.Systray(),
-                widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-                widget.QuickExit(),
-            ],
-            24,
-            border_width=0,
-            margin = [bar_margin_gaps, bar_margin_gaps, window_external_margin_gaps, bar_margin_gaps],
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
-        ),
-        # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
-        # By default we handle these events delayed to already improve performance, however your system might still be struggling
-        # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
-        # x11_drag_polling_rate = 60,
-    ),
-]
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
@@ -112,18 +38,6 @@ follow_mouse_focus = True
 bring_front_click = False
 floats_kept_above = True
 cursor_warp = False
-floating_layout = layout.Floating(
-    float_rules=[
-        # Run the utility of `xprop` to see the wm class and name of an X client.
-        *layout.Floating.default_float_rules,
-        Match(wm_class="confirmreset"),  # gitk
-        Match(wm_class="makebranch"),  # gitk
-        Match(wm_class="maketag"),  # gitk
-        Match(wm_class="ssh-askpass"),  # ssh-askpass
-        Match(title="branchdialog"),  # gitk
-        Match(title="pinentry"),  # GPG key password entry
-    ]
-)
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 reconfigure_screens = True
