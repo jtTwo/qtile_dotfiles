@@ -2,7 +2,6 @@ from libqtile import layout
 from libqtile.config import Match
 
 #CONFIG VARS
-window_external_margin_gaps = 10
 window_internal_margin_gaps = 5
 
 
