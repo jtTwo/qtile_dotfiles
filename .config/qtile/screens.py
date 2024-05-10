@@ -1,7 +1,7 @@
 from libqtile import bar#, widget
 from libqtile.config import Screen
 
-from qtile_extras import widget
+from qtile_extras import widget 
 from qtile_extras.widget.decorations import RectDecoration
 
 #CONFIG VARS
@@ -32,6 +32,28 @@ def widget_spacer(width):
         padding = width,
     )
 
+class MouseOverClock(widget.Clock):
+    defaults = [
+        (
+            "long_format",
+            "%A %d %B %Y | %H:%M",
+            "Format to show when mouse is over widget."
+        )
+    ]
+
+    def __init__(self, **config):
+        widget.Clock.__init__(self, **config)
+        self.add_defaults(MouseOverClock.defaults)
+        self.short_format = self.format
+
+    def mouse_enter(self, *args, **kwargs):
+        self.format = self.long_format
+        self.bar.draw()
+
+    def mouse_leave(self, *args, **kwargs):
+        self.format = self.short_format
+        self.bar.draw()
+
 screens = [
     Screen(
         bottom=bar.Gap(window_external_margin_gaps),
@@ -40,11 +62,12 @@ screens = [
 
         top=bar.Bar(
             [
+                #widget.Spacer(length=5),
                 widget.TextBox(
                     **symbol_defaults,
                     #background = "#444444",
                     text="",
-                    padding=27,
+                    padding=25,
                     decorations = [RectDecoration(
                         filled=True,
                         padding_x=0,
@@ -52,34 +75,45 @@ screens = [
                         colour="#777777",
                     )],
                 ),
-                widget_spacer(1),
+                widget.Spacer(length=8),
                 widget_separator,
                 widget.GroupBox(
                     **symbol_defaults,
-                    highlight_method='line',
+                    highlight_method='text',
+                    #block_highlight_text_color='ffffff',
+                    active='#68DD21',
+                    #foreground='ffffff',
+                    this_screen_border='#FFFFFF',
+                    this_current_screen_border='#FFFFFF',
                     borderwidth=1,
                     margin=2,
-                    padding_x=8
+                    padding_x=8,
+                    #urgent_border='ffffff',
                 ),
                 widget_separator,
-
                 #widget.CurrentLayout(**widget_defaults),
                 widget.CurrentLayoutIcon(scale=0.85),
+
                 widget.Prompt(),
                 widget.WindowName(),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.TextBox("default onfig", name="default"),
-                widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
+                #widget.TextBox("default onfig", name="default"),
+                #widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
-                widget.Systray(),
-                widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-                widget.QuickExit(),
+                #widget.Systray(),
+                #widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
+                #widget.QuickExit(),
+
+                widget.Spacer(length=bar.STRETCH),
+                MouseOverClock(),
+                widget.Spacer(length=bar.STRETCH),
+
+                widget.Clock(
+                    **widget_defaults,
+                    foreground = "#f0ffff",
+                    format = "%a, %b %d - %H:%M",
+                ),
+                widget.Spacer(length=5),
             ],
             size=25,
             border_width=7,
